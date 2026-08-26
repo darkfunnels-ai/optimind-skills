@@ -1,0 +1,12 @@
+{
+  "name": "optimind",
+  "version": "0.1.0",
+  "description": "Sell on WhatsApp with an AI sales agent. Operate your OptiMind workspace — sales manual, catalog, conversations, orders — from your assistant, plus a field-tested WhatsApp sales playbook useful on its own.",
+  "author": {
+    "name": "DarkFunnels",
+    "url": "https://darkfunnels.ai"
+  },
+  "homepage": "https://darkfunnels.ai",
+  "repository": "https://github.com/darkfunnels-ai/optimind-skills",
+  "keywords": ["whatsapp", "sales", "ventas", "mcp", "optimind", "ecommerce"]
+}

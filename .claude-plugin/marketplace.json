@@ -1,0 +1,15 @@
+{
+  "name": "darkfunnels",
+  "description": "Skills and connector packaging for OptiMind: sell on WhatsApp with an AI sales agent operated from your assistant.",
+  "owner": {
+    "name": "DarkFunnels",
+    "url": "https://darkfunnels.ai"
+  },
+  "plugins": [
+    {
+      "name": "optimind",
+      "source": "./",
+      "description": "Sell on WhatsApp with an AI sales agent: connect your assistant to OptiMind and manage manual, catalog, conversations and orders — includes a field-tested WhatsApp sales playbook."
+    }
+  ]
+}
