@@ -1,6 +1,6 @@
 ---
 name: optimind-setup
-description: Connect an AI assistant to OptiMind ("conecta mi Claude", "conectar ChatGPT a OptiMind", "no me conecta el asistente", "error al autorizar"). Connection steps per surface, feature groups, and troubleshooting the OAuth flow.
+description: Connect an AI assistant to OptiMind ("conecta mi Claude", "conectar ChatGPT a OptiMind", "conectar Codex", "no me conecta el asistente", "error al autorizar"). Connection steps per surface, feature groups, and troubleshooting the OAuth flow.
 ---
 
 # Conectar tu asistente a OptiMind
@@ -12,10 +12,11 @@ panel: **Personalizar → Asistentes IA**.
 
 ## claude.ai (recomendado — funciona hasta en el plan gratis)
 
-1. claude.ai → Ajustes → Conectores → **Añadir conector personalizado**.
+1. claude.ai → Personalizar → Conectores → Add → **Añadir conector
+   personalizado**.
 2. URL del servidor: `https://mcp.darkfunnels.ai/mcp?features=all`.
 3. Conectar → autoriza con la **misma cuenta** con la que entras al panel de
-   OptiMind. Con otra cuenta, la conexión se rechaza.
+   OptiMind. Con otra cuenta conectarás un workspace que no es el tuyo.
 
 ## Claude Code (avanzado)
 
@@ -24,12 +25,25 @@ claude mcp add --transport http optimind "https://mcp.darkfunnels.ai/mcp?feature
 ```
 
 Luego `/mcp` para autorizar en el navegador. La autorización desde terminal
-tiene hoy una limitación del proveedor de identidad: si no completa, contacta
-a soporte de OptiMind — hay una vía alternativa lista.
+tiene hoy una limitación del proveedor de identidad: si se queda esperando,
+conéctalo en claude.ai — Claude Code hereda los conectores de la cuenta.
 
-## ChatGPT (modo desarrollador, plan Plus/Pro)
+## Codex (OpenAI)
 
-1. Ajustes → Apps y conectores → activa el **modo desarrollador**.
+App, extensión del editor y terminal comparten configuración: se conecta una vez.
+
+1. Ajustes → MCP servers → Add server → **Streamable HTTP**.
+2. Pega la misma URL y guarda; el campo del token portador va **vacío**.
+3. Autoriza con la cuenta de OptiMind.
+
+Por terminal: `codex mcp add optimind --url "<URL>"` y `codex mcp login optimind`.
+
+## ChatGPT (modo desarrollador; planes de pago)
+
+El plan gratis de ChatGPT **no** admite conectores personalizados (sí Plus, Pro,
+Team, Enterprise y Edu). Con el gratis, la salida es claude.ai.
+
+1. Ajustes → Apps y conectores → Avanzado → activa el **modo desarrollador**.
 2. Crea el conector con la misma URL y autoriza con la cuenta de OptiMind.
 
 ## Grupos de funciones (`?features=`)
@@ -56,9 +70,13 @@ explícita SUSTITUYE al set base, no lo amplía — con `all` no hay que pensarl
 
 ## Problemas frecuentes
 
-- **«beta cerrada» / 403 tras autorizar** → autorizaste con OTRA cuenta.
-  Cierra sesión en el panel de OptiMind, entra con la cuenta correcta y
-  reconecta el conector.
+- **No ve los datos del negocio, o los ve vacíos** → autorizaste con OTRA
+  cuenta y estás en un workspace distinto. Confírmalo con `whoami`; si no es la
+  cuenta del dueño, borra el conector, entra al panel con la correcta y
+  reconecta.
+- **Codex autoriza pero no aparecen las herramientas** → actualiza Codex y abre
+  un hilo nuevo (fallo conocido de la app de escritorio alpha,
+  openai/codex#20009); terminal y extensión del editor funcionan.
 - **El asistente no ve funciones nuevas** → abre un chat NUEVO (el catálogo
   se fija por conversación). Si aun así faltan, el grupo no está en tu URL de
   conexión: añádelo (o usa `?features=all`) y reconecta.

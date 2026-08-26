@@ -16,10 +16,13 @@ OptiMind y ve exactamente lo que tú ves. Nunca mueve dinero.
 
 ## claude.ai / Claude Desktop / móvil
 
-1. Ve a **Ajustes → Conectores → Añadir conector personalizado**.
+1. Ve a **Personalizar → Conectores → Add → Añadir conector personalizado**.
 2. Pega la URL `https://mcp.darkfunnels.ai/mcp?features=all`.
 3. Pulsa **Conectar** y autoriza con la **misma cuenta** con la que entras al
-   panel de OptiMind (otra cuenta = acceso denegado).
+   panel de OptiMind (con otra cuenta conectarás un negocio que no es el tuyo).
+
+En cuentas de equipo, el conector lo añade el dueño de la organización desde
+los ajustes de la organización.
 
 La conexión vive en tu cuenta de Claude: funciona igual en el navegador, la
 app de escritorio y el móvil.
@@ -30,21 +33,40 @@ app de escritorio y el móvil.
 claude mcp add --transport http optimind "https://mcp.darkfunnels.ai/mcp?features=all"
 ```
 
-Luego `claude mcp login optimind` y autoriza en el navegador con la misma
-cuenta del panel.
+Luego, dentro de Claude Code, escribe `/mcp` y autoriza en el navegador con la
+misma cuenta del panel.
 
-> ⚠️ Hoy el login OAuth desde Claude Code puede fallar por una limitación del
-> proveedor de identidad (supabase/auth#2703, puerto de callback dinámico).
-> Si te pasa, el panel **Personalizar → Asistentes IA** tiene la vía
-> alternativa paso a paso.
+> ⚠️ Hoy el login OAuth desde la terminal puede quedarse esperando por una
+> limitación del proveedor de identidad (supabase/auth#2703, puerto de callback
+> dinámico). Si te pasa, conéctalo en claude.ai: Claude Code hereda los
+> conectores de tu cuenta.
+
+## Codex (OpenAI)
+
+La app, la extensión del editor y la terminal comparten configuración
+(`~/.codex/config.toml`): se conecta una sola vez.
+
+1. **Ajustes → MCP servers → Add server**, tipo **Streamable HTTP**.
+2. Pega la URL `https://mcp.darkfunnels.ai/mcp?features=all` y guarda. El campo
+   del token portador va **vacío**: la autorización es por tu cuenta.
+3. Autoriza con la **misma cuenta** con la que entras al panel de OptiMind.
+
+Desde la terminal:
+
+```bash
+codex mcp add optimind --url "https://mcp.darkfunnels.ai/mcp?features=all"
+codex mcp login optimind
+```
 
 ## ChatGPT (modo desarrollador)
 
-Requiere plan Plus/Pro con el **modo desarrollador** activo (Configuración
-avanzada).
+El plan **gratis de ChatGPT no admite conectores personalizados**: necesitas
+Plus, Pro, Team, Enterprise o Edu. Con el gratis, usa claude.ai (su plan gratis
+admite 1 conector y es el mismo link).
 
-1. **Configuración → Conectores → Crear** conector personalizado.
-2. Pega la URL `https://mcp.darkfunnels.ai/mcp?features=all` y guarda.
+1. **Ajustes → Apps y conectores → Avanzado → Modo desarrollador**.
+2. Crea un conector personalizado, pega la URL
+   `https://mcp.darkfunnels.ai/mcp?features=all` y guarda.
 3. Autoriza con la **misma cuenta** con la que entras al panel de OptiMind.
 
 ## Otros clientes MCP (Cursor, Windsurf, Gemini CLI, VS Code…)
@@ -80,9 +102,13 @@ volver a tocarla. `?read_only=true` desactiva toda escritura (también con
 
 ## Solución de problemas
 
-- **403 / «beta_closed»** → el puente está en beta cerrada: o tu cuenta aún no
-  tiene acceso (pídelo al equipo), o autorizaste con una cuenta distinta a la
-  del panel — cierra sesión en el navegador, entra con la correcta y reconecta.
+- **No ve tus datos, o los ve vacíos** → autorizaste con una cuenta distinta a
+  la del panel, así que estás conectado a otro workspace. Pregúntale «¿con qué
+  cuenta de OptiMind estás conectado?»; si no es la tuya, borra el conector,
+  entra a darkfunnels.ai con la cuenta correcta y reconecta.
+- **Codex autoriza pero no aparecen las herramientas** → actualiza Codex y abre
+  un hilo nuevo (fallo conocido de una versión alpha de la app de escritorio,
+  openai/codex#20009); la terminal y la extensión del editor sí funcionan.
 - **No aparecen herramientas nuevas** → abre un chat NUEVO: claude.ai relee el
   catálogo al empezar cada conversación (los chats ya abiertos conservan el
   suyo). Si aun así faltan, el grupo no está en tu URL de conexión — añádelo

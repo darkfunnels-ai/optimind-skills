@@ -24,8 +24,8 @@ Una sola URL — los pasos por superficie están en [SETUP.md](SETUP.md):
 https://mcp.darkfunnels.ai/mcp?features=all
 ```
 
-> El conector está en **beta cerrada**: necesita que tu cuenta de OptiMind esté
-> habilitada. Si al autorizar ves «beta cerrada», pídele acceso al equipo.
+> No hace falta pedir acceso: si tienes cuenta en OptiMind, ya puedes conectar.
+> Autoriza con la misma cuenta con la que entras al panel.
 
 ## ¿Todavía no usas OptiMind?
 
