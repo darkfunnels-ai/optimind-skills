@@ -98,7 +98,10 @@ sumar sin perder nada hay que nombrarlo entero: `?features=manual,catalog,
 conversations,orders`. `?features=all` activa TODO el catálogo, incluidos los
 grupos que se publiquen en el futuro — es la URL recomendada si no quieres
 volver a tocarla. `?read_only=true` desactiva toda escritura (también con
-`all`).
+`all`). `?pii=full` destapa los teléfonos de los clientes finales, que por
+defecto llegan enmascarados (`51•••••4321`); ninguna herramienta necesita el
+número para operar sobre un chat, así que el enmascarado no cierra ninguna
+puerta.
 
 ## Solución de problemas
 

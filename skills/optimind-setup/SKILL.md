@@ -66,7 +66,11 @@ Ejemplo: `https://mcp.darkfunnels.ai/mcp?features=operations,orders`.
 `?features=all` activa todos los grupos, incluidos los futuros (la lista
 explícita SUSTITUYE al set base, no lo amplía — con `all` no hay que pensarlo).
 `?read_only=true` fuerza solo lectura (anula toda escritura, también con
-`all`). `?agent=<uuid>` pre-selecciona un agente.
+`all`). `?agent=<uuid>` pre-selecciona un agente. `?pii=full` destapa los
+teléfonos de los clientes finales, que por defecto llegan enmascarados
+(`51•••••4321`); ninguna herramienta necesita el número para operar sobre un
+chat —todas direccionan por la conversación—, así que el enmascarado no impide
+ninguna operación.
 
 ## Problemas frecuentes
 
