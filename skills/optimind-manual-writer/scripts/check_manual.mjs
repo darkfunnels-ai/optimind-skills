@@ -230,6 +230,39 @@ for (const r of seq) {
     err(c, "viene vacio (sin instrucciones en thought_chain): el agente que llegue ahi se queda sin nada que hacer.");
   }
 
+  // ── Anatomia de PASOS (correccion 31-ago, espejo de funnelStructure.ts) ──
+  // Encabezado = inicio de linea «PASO N:» (o «PASO N -»); el preambulo antes
+  // del PASO 1 es legal (ahi vive la REGLA DE EJECUCION). apply_funnel RECHAZA
+  // lo que aqui sale como error.
+  {
+    const headers = [];
+    for (const m of r.thought.matchAll(/^PASO\s*(\d+)\s*[:\-]/gim)) headers.push(Number(m[1]));
+    if (headers.length === 0 || headers[0] !== 1) {
+      err(c, "el razonamiento no abre con «PASO 1:»: todo capitulo se escribe como PASOS numerados, cada uno con su condicional; la REGLA DE EJECUCION (si el capitulo rutea) va ANTES del PASO 1.");
+    } else {
+      for (let k = 1; k < headers.length; k++) {
+        if (headers[k] !== headers[k - 1] + 1) {
+          err(c, `los PASOS no son secuenciales (tras el PASO ${headers[k - 1]} viene el PASO ${headers[k]}): numera 1..N sin saltos ni repetidos.`);
+          break;
+        }
+      }
+      // El MAYOR encabezado, no el último: con PASOS desordenados el hallazgo
+      // de secuencia ya salio, y acusar de «inexistente» a un paso escrito
+      // seria un segundo hallazgo falso (espejo de funnelStructure.ts).
+      const maxHeader = Math.max(...headers);
+      for (const m of r.thought.matchAll(/\bPASO\s*(\d+)\b/gi)) {
+        const ref = Number(m[1]);
+        // «PASO 7 del capitulo En venta» referencia OTRO capitulo: fuera de alcance.
+        const tail = r.thought.slice(m.index + m[0].length, m.index + m[0].length + 24);
+        if (/^\s+del?\s+(?:ese\s+|dicho\s+)?cap[ií]tulo\b/i.test(tail)) continue;
+        if (ref < 1 || ref > maxHeader) {
+          err(c, `nombra el PASO ${ref}, que no existe en este capitulo (tiene ${maxHeader}).`);
+          break;
+        }
+      }
+    }
+  }
+
   // ###BLOCK### balanceado (sin anidar).
   let open = 0;
   let broken = false;
@@ -356,7 +389,7 @@ if (ordersOk) {
 
 if (filePhrases.size > 0) {
   warn(0,
-    `hay ${filePhrases.size} marcador(es) ###SEND_FILES### — este validador NO puede comprobar que la frase corresponda a un archivo enviable VIVO. Verifica con list_library_files (capability: "sendable") que cada frase sea exactamente un trigger_condition: ${[...filePhrases].map((p) => `«${p}»`).join(", ")}.`);
+    `hay ${filePhrases.size} marcador(es) ###SEND_FILES### — este validador NO puede comprobar que la frase corresponda a un archivo enviable VIVO. Verifica con list_library_files (capability: "sendable") que cada frase sea el NOMBRE de un archivo sin extension (el estandar) o su trigger_condition vivo: ${[...filePhrases].map((p) => `«${p}»`).join(", ")}.`);
 }
 if (varKeys.size > 0) {
   warn(0,

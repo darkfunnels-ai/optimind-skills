@@ -48,11 +48,13 @@ Team, Enterprise y Edu). Con el gratis, la salida es claude.ai.
 
 ## Grupos de funciones (`?features=`)
 
-Sin parámetros, la conexión trae el set base de LECTURA: manual, catálogo,
-conversaciones y clientes, saldo. Grupos opcionales se activan añadiendo
+Sin parámetros, la conexión trae el set base: lecturas de manual, catálogo,
+conversaciones, clientes y saldo, más una única escritura de gestión no
+destructiva (etiquetar clientes). Grupos opcionales se activan añadiendo
 `?features=` a la URL, separados por coma:
 
-- `manual_write` — guardar capítulos y restaurar versiones del manual
+- `agents_write` — crear un embudo nuevo (consume un cupo de la suscripción)
+- `manual_write` — guardar capítulos, restaurar versiones y aplicar un embudo completo
 - `catalog_write` — crear/editar/borrar productos
 - `library` — archivos de la Librería (subir, vincular a agentes)
 - `operations` — modo de conversación, envío como operador, recordatorios
@@ -68,9 +70,10 @@ explícita SUSTITUYE al set base, no lo amplía — con `all` no hay que pensarl
 `?read_only=true` fuerza solo lectura (anula toda escritura, también con
 `all`). `?agent=<uuid>` pre-selecciona un agente. `?pii=full` destapa los
 teléfonos de los clientes finales, que por defecto llegan enmascarados
-(`51•••••4321`); ninguna herramienta necesita el número para operar sobre un
-chat —todas direccionan por la conversación—, así que el enmascarado no impide
-ninguna operación.
+(`51•••••4321`); las herramientas que operan sobre un chat existente
+direccionan por la conversación, así que el enmascarado no las estorba. La
+excepción es `simulate_new_chat` (grupo de pruebas), que recibe como entrada un
+número de PRUEBA que tú mismo escribes.
 
 ## Problemas frecuentes
 
