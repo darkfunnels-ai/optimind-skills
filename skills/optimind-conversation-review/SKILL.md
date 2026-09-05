@@ -52,8 +52,7 @@ producto», «escribe a este número»), eso ES un hallazgo de la auditoría
      preguntado y remata con la pregunta pendiente»),
    - rama sin CTA → toda ráfaga del capítulo termina en UNA pregunta,
    - precio escondido → el número entra al capítulo de oferta,
-   - avance que no ocurre → revisar la línea literal de avance y la
-     `advance_condition` observable,
+   - avance que no ocurre → revisar la línea literal de avance del PASO que cierra,
    - seguimiento genérico → recordatorios que nombran el paso exacto pendiente
      (`create_reminder`, escalera 24-48h → 72h → día 5).
 6. **Cierra el lazo**: propone los cambios concretos, aplica solo con el visto

@@ -22,7 +22,7 @@ error ni un motivo para mandar al dueño a la web: es el arranque del alta.
    adelanto», «esto pasa a una persona del equipo») y qué hace antes de dar la
    venta por cerrada. No le hables de capítulos ni de términos técnicos. Los
    capítulos salen de ESA narración: uno por etapa real, en su orden exacto,
-   cada uno con su propósito, sus preguntas, su condición de avance, sus
+   cada uno con su propósito, sus preguntas, sus
    excepciones (dentro del capítulo al que pertenecen) y sus acciones. Un
    capítulo estándar (saludo, objeciones, cierre, seguimiento) solo existe si
    es parte del proceso real; una etapa que la plantilla no trae se escribe de
@@ -123,8 +123,6 @@ Para EDITAR un embudo que ya vende, el flujo es el de abajo y la herramienta es
   debe contener exactamente `Llama a la herramienta advance_chapter con el
   capitulo N` (N = display_order destino). Un avance redactado «en prosa» no
   se ejecuta y el embudo se clava. Nunca avances a un capítulo que no existe.
-- **`advance_condition` = conducta OBSERVABLE del cliente** («el cliente dio
-  su distrito»), jamás una intención («el cliente parece interesado»).
 - **Un objetivo por capítulo.** Un capítulo que saluda, califica y cierra a
   la vez no hace ninguna de las tres.
 

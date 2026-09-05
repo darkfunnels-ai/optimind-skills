@@ -86,12 +86,12 @@ function maskSpans(text, spans) {
 const EDITOR_KEYS = new Set([
   "id", "chapter_index", "agent_id", "company_id", "chapter_label", "role",
   "thought_chain", "context", "key_points", "examples", "execute_once",
-  "display_order", "advance_to", "advance_condition", "status", "name",
+  "display_order", "advance_to", "status", "name",
   "user_id", "created_at", "updated_at", "tools", "media", "color",
 ]);
 const ES_ALIAS_KEYS = new Set([
   "tipo", "capitulo", "chapter", "rol", "razonamiento", "contexto", "ejemplos",
-  "orden", "ejecutar_una_vez", "avanzar_a", "condicion_de_avance", "instruction",
+  "orden", "ejecutar_una_vez", "avanzar_a", "instruction",
 ]);
 
 // ── Recoleccion de findings ─────────────────────────────────────────────────
@@ -115,7 +115,6 @@ const rows = chapters.map((raw, i) => {
     role: str(pick(ch, "role", "rol")),
     thought: str(pick(ch, "thought_chain", "razonamiento")),
     context: str(pick(ch, "context", "contexto")),
-    advCond: str(pick(ch, "advance_condition", "condicion_de_avance")),
     order: pick(ch, "display_order", "orden"),
     execOnce: pick(ch, "execute_once", "ejecutar_una_vez") === true,
     advTo: pick(ch, "advance_to", "avanzar_a"),
@@ -134,7 +133,7 @@ for (const r of rows) {
         "trae `key_points` con texto: es el shape viejo. Fusiona ese texto en `context` bajo el rotulo PUNTOS CLAVE: (no existe un campo aparte).");
     } else if (!EDITOR_KEYS.has(key) && !ES_ALIAS_KEYS.has(key)) {
       err(r.pos,
-        `clave inventada «${key}»: el key-set del capitulo es fijo (campos del editor: chapter_label, role, thought_chain, context, examples, display_order, execute_once, advance_to, advance_condition…).`);
+        `clave inventada «${key}»: el key-set del capitulo es fijo (campos del editor: chapter_label, role, thought_chain, context, examples, display_order, execute_once, advance_to…).`);
     }
   }
 }
@@ -181,7 +180,7 @@ seq.forEach((r, i) => { r.c = ordersOk ? r.order : r.pos; });
 
 // ── Checks por capitulo ─────────────────────────────────────────────────────
 
-const chapterText = (r) => [r.role, r.thought, r.context, r.advCond].join("\n");
+const chapterText = (r) => [r.role, r.thought, r.context].join("\n");
 const chapterInstructions = (r) => r.thought.replace(RE_ADVANCE, " ").replace(/\s+/g, " ").trim();
 const MIN_CHAPTER_CHARS = 25;
 
@@ -321,16 +320,10 @@ for (const r of seq) {
 
   // Residuos FUERA de menciones: formas muertas o en prosa que el cerebro no ejecuta.
   const residue = maskSpans(text, spans);
-  // advance_condition queda FUERA de los checks de prosa: es la DESCRIPCION
-  // del criterio («el cliente esta listo para pasar al capitulo 2») y no una
-  // instruccion que el cerebro deba ejecutar — escanearla daba falso ERROR.
-  // Es el ultimo segmento del join, asi que basta recortar su sufijo (el
-  // masking conserva longitudes).
-  const residueProse = r.advCond ? residue.slice(0, residue.length - r.advCond.length) : residue;
-  for (const m of residueProse.matchAll(RE_CAPITULO_LOOSE)) {
+  for (const m of residue.matchAll(RE_CAPITULO_LOOSE)) {
     err(c, `«${m[0]}» suelto — forma muerta de avanzar; usa «${ADVANCE_CANONICAL}».`);
   }
-  for (const m of residueProse.matchAll(RE_PROSE_ADVANCE)) {
+  for (const m of residue.matchAll(RE_PROSE_ADVANCE)) {
     const target = Number(m[1]);
     err(c, `«${m[0].trim()}» esta escrito en prosa y el cerebro NO lo ejecuta; la forma viva es «Llama a la herramienta advance_chapter con el capitulo ${target}».`);
     if (liveOrders.has(target)) reachable.add(target);
